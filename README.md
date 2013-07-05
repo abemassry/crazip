@@ -26,10 +26,10 @@ Here are some notes on python code to make sure I was correctly generating the b
 
 ### Time trials / benchmarking
 
-|Tester    |File      |Bits   |Bytes | Time (s)|
-|----------|----------|------:|-----:|--------:|
-|@abemassry|a.txt     |16     |2     |    0.424|
-|@abemassry|ab.txt    |24     |3     |    17.65|
-|@abemassry|abc.txt   |32     |4     |    3405 |
+|Tester                                    |File      |Bits   |Bytes | Time (s)|
+|------------------------------------------|----------|------:|-----:|--------:|
+|[@abemassry](https://github.com/abemassry)|a.txt     |16     |2     |    0.424|
+|[@abemassry](https://github.com/abemassry)|ab.txt    |24     |3     |    17.65|
+|[@abemassry](https://github.com/abemassry)|abc.txt   |32     |4     |    3405 |
 
 Test and submit a pull request with your file and add your time.
