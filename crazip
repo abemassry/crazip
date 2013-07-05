@@ -1,0 +1,32 @@
+#!/usr/bin/python
+#
+import mmh3
+import sys
+import os
+
+try:
+  # open file
+  filename = sys.argv[1]
+  sys.stderr.write("the input file name: ")
+  sys.stderr.write(filename)
+  sys.stderr.write("\n")
+  f = open(filename, "rb")
+  contents = f.read()
+  f.close()
+  h1 = mmh3.hash64(contents)
+  h1str = str(h1)
+  size = os.path.getsize('./'+filename)
+  sizestr = str(size)
+  #write out comp file
+  outfilename = filename + '.crz'
+  outfilecontents = h1str+';'+sizestr
+  wf = open(outfilename, 'w')
+  wf.write(outfilecontents)
+  wf.close()
+  
+  sys.stderr.write("file hashed/compressed as : ")
+  sys.stderr.write(outfilename)
+  sys.stderr.write("\n")
+except:
+  sys.stderr.write("no file specified, or error")
+  sys.stderr.write("\n")

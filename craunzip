@@ -1,0 +1,88 @@
+#!/usr/bin/python
+#
+import mmh3
+import sys
+import os
+import ast
+import multiprocessing
+import time
+
+exitFlag = 0
+printed = 0
+#match=0
+#found_by = ''
+
+match = multiprocessing.Value('i', 0)
+solution = multiprocessing.Array('c', 'temp val')
+
+def find_match(processName, size, ohash, outfile):
+  while (match.value == 0):
+    rands = str(bytearray(os.urandom(size)))
+    h1 = mmh3.hash64(rands)
+    if (h1 == ohash):
+      wf = open(outfile, "wb")
+      wf.write(rands)
+      wf.close()
+      solution.value = rands
+      match.value = 1
+      found_by= processName
+      sys.stderr.write("solution found by: ")
+      sys.stderr.write(found_by)
+      sys.stderr.write("\n")
+      return solution.value
+    
+#try:
+# open file
+if __name__ == '__main__':
+  tasks = multiprocessing.Queue()
+  results = multiprocessing.Queue()
+
+  filename = sys.argv[1]
+  sys.stderr.write("the input file name: ")
+  sys.stderr.write(filename)
+  sys.stderr.write("\n")
+  filenameParts = filename.split('.')
+  outfilename = filenameParts[0]+'.'+filenameParts[1]
+  f = open(filename, "r")
+  contents = f.read()
+  f.close()
+  cstr = str(contents)
+  parts = cstr.split(';')
+  hashstr = parts[0]
+  sizestr = parts[1]
+  size = int(sizestr)
+  ohash = ast.literal_eval(hashstr)
+  
+  
+  cores = multiprocessing.cpu_count()
+  jobs = []
+  sys.stderr.write("running on ")
+  sys.stderr.write(str(cores))
+  sys.stderr.write(" cores")
+  sys.stderr.write("\n")
+  time_at_start = time.time()
+  for i in range(cores):
+    istr = str(i)
+    procName = "Process-"+istr
+    sys.stderr.write("starting: ")
+    sys.stderr.write(procName)
+    sys.stderr.write("\n")
+    p = multiprocessing.Process(target=find_match, args=(procName, size, ohash, 
+                                outfilename))
+    jobs.append(p)
+    p.start()
+
+  for p in jobs:
+    p.join()
+    if (printed == 0):
+      #sys.stderr.write('%s.exitcode = %s' % (p.name, p.exitcode))
+      #sys.stderr.write("\n")
+      printed = 1
+      time_at_end = time.time()
+      total_time = time_at_end - time_at_start
+      sys.stderr.write("total time: "+str(total_time))
+      sys.stderr.write("\n")
+
+#except:
+#  sys.stderr.write("no file specified, or error")
+#  sys.stderr.write("\n")
