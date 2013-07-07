@@ -36,5 +36,5 @@ Test and submit a pull request with your file and add your time.
 
 Seems like an NP hard problem, probably O(n!). A computer scientist could comment.
 
-#### Licence
+#### License
 MIT
