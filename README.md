@@ -22,7 +22,7 @@ This is the thread based test script for reference.
 This is the multicore decompression script and the main file
 
 #### notes.txt
-Here are some notes on python code to make sure I was correctly generating the bits
+Here are some notes in python code to make sure I was correctly generating the bits
 
 ### Time trials / benchmarking
 
@@ -33,3 +33,8 @@ Here are some notes on python code to make sure I was correctly generating the b
 |[@abemassry](https://github.com/abemassry)|abc.txt   |32     |4     |    3405 |
 
 Test and submit a pull request with your file and add your time.
+
+Seems like an NP hard problem, probably O(n!). A computer scientist could comment.
+
+#### Licence
+MIT
