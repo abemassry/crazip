@@ -31,58 +31,61 @@ def find_match(processName, size, ohash, outfile):
       sys.stderr.write("\n")
       return solution.value
     
-#try:
-# open file
+
 if __name__ == '__main__':
-  tasks = multiprocessing.Queue()
-  results = multiprocessing.Queue()
-
-  filename = sys.argv[1]
-  sys.stderr.write("the input file name: ")
-  sys.stderr.write(filename)
-  sys.stderr.write("\n")
-  filenameParts = filename.split('.')
-  outfilename = filenameParts[0]+'.'+filenameParts[1]
-  f = open(filename, "r")
-  contents = f.read()
-  f.close()
-  cstr = str(contents)
-  parts = cstr.split(';')
-  hashstr = parts[0]
-  sizestr = parts[1]
-  size = int(sizestr)
-  ohash = ast.literal_eval(hashstr)
+  try:
+    
+    tasks = multiprocessing.Queue()
+    results = multiprocessing.Queue()
   
-  
-  cores = multiprocessing.cpu_count()
-  jobs = []
-  sys.stderr.write("running on ")
-  sys.stderr.write(str(cores))
-  sys.stderr.write(" cores")
-  sys.stderr.write("\n")
-  time_at_start = time.time()
-  for i in range(cores):
-    istr = str(i)
-    procName = "Process-"+istr
-    sys.stderr.write("starting: ")
-    sys.stderr.write(procName)
+    # open file
+    filename = sys.argv[1]
+    sys.stderr.write("the input file name: ")
+    sys.stderr.write(filename)
     sys.stderr.write("\n")
-    p = multiprocessing.Process(target=find_match, args=(procName, size, ohash, 
-                                outfilename))
-    jobs.append(p)
-    p.start()
-
-  for p in jobs:
-    p.join()
-    if (printed == 0):
-      #sys.stderr.write('%s.exitcode = %s' % (p.name, p.exitcode))
-      #sys.stderr.write("\n")
-      printed = 1
-      time_at_end = time.time()
-      total_time = time_at_end - time_at_start
-      sys.stderr.write("total time: "+str(total_time))
+    filenameParts = filename.split('.')
+    outfilename = filenameParts[0]+'.'+filenameParts[1]
+    f = open(filename, "r")
+    contents = f.read()
+    f.close()
+    cstr = str(contents)
+    parts = cstr.split(';')
+    hashstr = parts[0]
+    sizestr = parts[1]
+    size = int(sizestr)
+    ohash = ast.literal_eval(hashstr)
+    
+    # start up multiprocessors
+    cores = multiprocessing.cpu_count()
+    jobs = []
+    sys.stderr.write("running on ")
+    sys.stderr.write(str(cores))
+    sys.stderr.write(" cores")
+    sys.stderr.write("\n")
+    time_at_start = time.time()
+    for i in range(cores):
+      istr = str(i)
+      procName = "Process-"+istr
+      sys.stderr.write("starting: ")
+      sys.stderr.write(procName)
       sys.stderr.write("\n")
+      p = multiprocessing.Process(target=find_match, args=(procName, size, ohash, 
+                                  outfilename))
+      jobs.append(p)
+      p.start()
+  
+    # when all processes exit
+    for p in jobs:
+      p.join()
+      if (printed == 0):
+        #sys.stderr.write('%s.exitcode = %s' % (p.name, p.exitcode))
+        #sys.stderr.write("\n")
+        printed = 1
+        time_at_end = time.time()
+        total_time = time_at_end - time_at_start
+        sys.stderr.write("total time: "+str(total_time))
+        sys.stderr.write("\n")
 
-#except:
-#  sys.stderr.write("no file specified, or error")
-#  sys.stderr.write("\n")
+  except:
+    sys.stderr.write("no file specified, or error")
+    sys.stderr.write("\n")
