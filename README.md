@@ -16,10 +16,10 @@ War and peace test text file from: http://www.textfiles.com/etext/FICTION/war_pe
 This is the single threaded test script for reference.
 
 #### decompress_threads.py
-This is the thread based test script for reference.
+This is the thread based test script for reference.  Because of the Python Global Interpreter Lock threads execute with the eqivalent of one core.
 
 #### craunzip
-This is the multicore decompression script and the main file
+This is the multicore decompression script and the main file.  The multiprocessing library is used that is similar to a C fork() this is one way to get true multiprocessing in python.
 
 #### notes.txt
 Here are some notes in python code to make sure I was correctly generating the bits
